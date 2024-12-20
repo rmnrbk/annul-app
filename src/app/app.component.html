@@ -1,0 +1,26 @@
+<div
+  class="app-container font-sans text-gray-800 m-0 p-0 bg-gray-100 h-screen flex flex-col"
+>
+  <main class="flex flex-col">
+    <div class="flex justify-between">
+      <section class="p-5 w-2/5 bg-white box-border">
+        <app-filters (filtersChanged)="onFiltersChanged($event)"></app-filters>
+      </section>
+      <section class="p-5 w-3/5 bg-white box-border">
+        <app-details
+          [dg]="selectedDg"
+          (onSaveEdited)="onSaveChanges($event)"
+        ></app-details>
+      </section>
+    </div>
+
+    <div class="p-5 bg-white box-border">
+      <section>
+        <app-table
+          [dgPaymentAnnulRules]="dgPaymentAnnulRules"
+          (rowSelected)="onRowSelected($event)"
+        ></app-table>
+      </section>
+    </div>
+  </main>
+</div>

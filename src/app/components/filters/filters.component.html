@@ -1,0 +1,161 @@
+<div class="p-5 border border-gray-300 rounded-xl bg-gray-100 shadow-md">
+  <h2 class="text-left text-2xl mb-6 text-gray-800">Фильтры</h2>
+
+  <form
+    [formGroup]="filterForm"
+    (ngSubmit)="onSubmit()"
+    class="flex flex-col justify-between"
+  >
+    <div>
+      <!-- Поиск по номеру путёвки -->
+      <div class="mb-5">
+        <div class="flex justify-between">
+          <input
+            class="w-full text-base p-3 border border-gray-300 rounded shadow-inner focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+            formControlName="dgCodes"
+            type="text"
+            placeholder="Номер путёвки"
+            name="search"
+          />
+        </div>
+
+        <!-- Ошибки для номеров путёвок -->
+        @if(filterForm.get('dgCodes')?.touched &&
+        filterForm.get('dgCodes')?.invalid){
+        <small class="text-red-600">Некорректные коды путёвок.</small>
+        }
+      </div>
+
+      <!-- Даты создания/заезда/выезда -->
+      <div class="mb-5">
+        <label class="block font-bold mb-2 text-gray-700">Тип даты</label>
+        <select
+          formControlName="dgDateType"
+          class="w-full p-2.5 mt-1 mb-3 text-base border border-gray-300 rounded shadow-inner focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+        >
+          <option value="CreationDate">Дата создания</option>
+          <option value="CheckInDate">Дата заезда</option>
+          <option value="CheckOutDate">Дата выезда</option>
+        </select>
+
+        <div class="date-range flex justify-between">
+          <div class="w-[48%]">
+            <label class="block font-bold mb-2 text-gray-700">С:</label>
+            <input
+              type="date"
+              formControlName="dgDateStart"
+              class="w-full p-2.5 mt-1 mb-3 text-base border border-gray-300 rounded shadow-inner focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+            />
+          </div>
+          <div class="w-[48%]">
+            <label class="block font-bold mb-2 text-gray-700">По:</label>
+            <input
+              type="date"
+              formControlName="dgDateEnd"
+              class="w-full p-2.5 mt-1 mb-3 text-base border border-gray-300 rounded shadow-inner focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+            />
+          </div>
+        </div>
+
+        <!-- Ошибки для диапазона дат -->
+        @if(filterForm.errors?.['dgDateRangeInvalid']){
+        <small class="text-red-600">Некорректные даты.</small>
+        }
+      </div>
+
+      <!-- Даты оплаты/предоплаты -->
+      <div class="mb-5">
+        <label class="block font-bold mb-2 text-gray-700"
+          >Тип даты оплаты</label
+        >
+        <select
+          formControlName="paymentDateType"
+          class="w-full p-2.5 mt-1 mb-3 text-base border border-gray-300 rounded shadow-inner focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+        >
+          <option value="PrePaymentDate">Дата предоплаты</option>
+          <option value="PaymentDate">Дата полной оплаты</option>
+        </select>
+        <div class="date-range flex justify-between">
+          <div class="w-[48%]">
+            <label class="block font-bold mb-2 text-gray-700">С:</label>
+            <input
+              type="date"
+              formControlName="paymentDateStart"
+              class="w-full p-2.5 mt-1 mb-3 text-base border border-gray-300 rounded shadow-inner focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+            />
+          </div>
+          <div class="w-[48%]">
+            <label class="block font-bold mb-2 text-gray-700">По:</label>
+            <input
+              type="date"
+              formControlName="paymentDateEnd"
+              class="w-full p-2.5 mt-1 mb-3 text-base border border-gray-300 rounded shadow-inner focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+            />
+          </div>
+        </div>
+
+        <!-- Ошибки для диапазона дат -->
+        @if(filterForm.errors?.['payDateRangeInvalid']){
+        <small class="text-red-600">Некорректные даты.</small>
+        }
+      </div>
+
+      <!-- Размер предоплаты -->
+      <div class="filter-section mb-5">
+        <label class="block font-bold mb-2 text-gray-700"
+          >Размер предоплаты, руб:</label
+        >
+        <div class="value-range flex justify-between">
+          <input
+            type="number"
+            formControlName="minPrepayment"
+            placeholder="От"
+            class="w-[45%] p-2.5 mt-1 mb-3 text-base border border-gray-300 rounded shadow-inner focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+          />
+          <input
+            type="number"
+            formControlName="maxPrepayment"
+            placeholder="До"
+            class="w-[45%] p-2.5 mt-1 mb-3 text-base border border-gray-300 rounded shadow-inner focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+          />
+        </div>
+        @if(filterForm.errors?.['prepaymentRangeInvalid']){
+        <small class="text-red-600">Некорректные значения.</small>
+        }
+      </div>
+
+      <!-- Размер полной оплаты -->
+      <div class="filter-section mb-5">
+        <label class="block font-bold mb-2 text-gray-700"
+          >Размер оплаты, руб:</label
+        >
+        <div class="value-range flex justify-between">
+          <input
+            type="number"
+            formControlName="minPayment"
+            placeholder="От"
+            class="w-[45%] p-2.5 mt-1 mb-3 text-base border border-gray-300 rounded shadow-inner focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+          />
+          <input
+            type="number"
+            formControlName="maxPayment"
+            placeholder="До"
+            class="w-[45%] p-2.5 mt-1 mb-3 text-base border border-gray-300 rounded shadow-inner focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+          />
+        </div>
+        @if(filterForm.errors?.['paymentRangeInvalid']){
+        <small class="text-red-600">Некорректные значения.</small>
+        }
+      </div>
+    </div>
+
+    <div>
+      <button
+        type="submit"
+        class="w-full p-3 text-base font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-200"
+      >
+        Найти
+      </button>
+    </div>
+  </form>
+</div>
