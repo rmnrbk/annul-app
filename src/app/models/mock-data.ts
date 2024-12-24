@@ -4,7 +4,7 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
   {
     dgKey: 1,
     dgCode: '123qwertyu',
-    dgCrDate: new Date('2024-12-19'),
+    dgCrDate: new Date('2024-12-24'),
     dgTurDateStart: new Date('2024-12-05'),
     dgTurDateEnd: new Date('2024-12-10'),
     prepayPerc: 20,
@@ -22,7 +22,7 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
   {
     dgKey: 2,
     dgCode: '124qwertyu',
-    dgCrDate: new Date('2024-12-19'),
+    dgCrDate: new Date('2024-12-24'),
     dgTurDateStart: new Date('2024-12-05'),
     dgTurDateEnd: new Date('2024-12-10'),
     prepayPerc: 50,
@@ -40,7 +40,7 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
   {
     dgKey: 3,
     dgCode: '125qwertyu',
-    dgCrDate: new Date('2024-12-19'),
+    dgCrDate: new Date('2024-12-24'),
     dgTurDateStart: new Date('2024-12-05'),
     dgTurDateEnd: new Date('2024-12-10'),
     prepayPerc: 30,
@@ -58,7 +58,7 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
   {
     dgKey: 4,
     dgCode: '126qwertyu',
-    dgCrDate: new Date('2024-12-19'),
+    dgCrDate: new Date('2024-12-24'),
     dgTurDateStart: new Date('2024-12-05'),
     dgTurDateEnd: new Date('2024-12-10'),
     prepayPerc: 20,
@@ -76,7 +76,7 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
   {
     dgKey: 5,
     dgCode: '127qwertyu',
-    dgCrDate: new Date('2024-12-19'),
+    dgCrDate: new Date('2024-12-24'),
     dgTurDateStart: new Date('2024-12-05'),
     dgTurDateEnd: new Date('2024-12-10'),
     prepayPerc: 50,
@@ -94,7 +94,7 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
   {
     dgKey: 6,
     dgCode: '128qwertyu',
-    dgCrDate: new Date('2024-12-19'),
+    dgCrDate: new Date('2024-12-24'),
     dgTurDateStart: new Date('2024-12-05'),
     dgTurDateEnd: new Date('2024-12-10'),
     prepayPerc: 30,
@@ -112,7 +112,7 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
   {
     dgKey: 7,
     dgCode: '129qwertyu',
-    dgCrDate: new Date('2024-12-19'),
+    dgCrDate: new Date('2024-12-24'),
     dgTurDateStart: new Date('2024-12-05'),
     dgTurDateEnd: new Date('2024-12-10'),
     prepayPerc: 20,
@@ -130,7 +130,7 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
   {
     dgKey: 8,
     dgCode: '130qwertyu',
-    dgCrDate: new Date('2024-12-19'),
+    dgCrDate: new Date('2024-12-24'),
     dgTurDateStart: new Date('2024-12-05'),
     dgTurDateEnd: new Date('2024-12-10'),
     prepayPerc: 50,
@@ -148,7 +148,7 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
   {
     dgKey: 9,
     dgCode: '131qwertyu',
-    dgCrDate: new Date('2024-12-19'),
+    dgCrDate: new Date('2024-12-24'),
     dgTurDateStart: new Date('2024-12-05'),
     dgTurDateEnd: new Date('2024-12-10'),
     prepayPerc: 30,

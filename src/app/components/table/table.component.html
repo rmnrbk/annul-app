@@ -31,8 +31,7 @@
         <tr
           *ngFor="let dg of dgPaymentAnnulRules; let i = index"
           (click)="selectRow(dg)"
-          ngcl
-          [ngClass]="{ 'bg-blue-100': selectedDgCode === dg.dgCode }"
+          [ngClass]="{ 'bg-blue-100': isSelected(dg.dgCode) }"
           class="border-b hover:bg-gray-100 cursor-pointer"
         >
           <td class="py-4 px-6 text-center">{{ i + 1 }}</td>

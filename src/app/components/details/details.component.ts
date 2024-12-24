@@ -24,7 +24,10 @@ import { DetailsValidators } from './validators/details-validators';
   // styleUrls: ['./details.component.css'],
 })
 export class DetailsComponent implements OnChanges {
-  @Input() dg?: DgPayRule;
+  // Раньше было dg?: DgPayRule
+  @Input() dgs: DgPayRule[] = [];
+
+  // Вызывается при клике "Сохранить"
   @Output() onSaveEdited = new EventEmitter<DgPayRule>();
 
   form?: FormGroup;
@@ -32,21 +35,25 @@ export class DetailsComponent implements OnChanges {
   constructor(private fb: FormBuilder) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (this.dg) {
-      // Инициализируем форму и выставляем начальные значения из полученного объекта
+    if (this.dgs && this.dgs.length > 0) {
+      // Если выбрано N строк – берём первую в качестве «эталона»
+      // (или при желании вычисляем «общие» поля).
+      const dg = this.dgs[0];
+
+      // Создаём форму на базе первого dg
       this.form = this.fb.group(
         {
-          prepayPerc: [this.dg.prepayPerc],
-          prepayDate: [this.dg.prepayDate?.toISOString().split('T')[0]],
-          payDate: [this.dg.payDate?.toISOString().split('T')[0]],
+          prepayPerc: [dg.prepayPerc],
+          prepayDate: [dg.prepayDate?.toISOString().split('T')[0]],
+          payDate: [dg.payDate?.toISOString().split('T')[0]],
           autoAnnulNoFineDate: [
-            this.dg.autoAnnulNoFineDate?.toISOString().split('T')[0],
+            dg.autoAnnulNoFineDate?.toISOString().split('T')[0],
           ],
-          autoAnnulDate: [this.dg.autoAnnulDate?.toISOString().split('T')[0]],
+          autoAnnulDate: [dg.autoAnnulDate?.toISOString().split('T')[0]],
           guaranteeLetterDate: [
-            this.dg.guaranteeLetterDate?.toISOString().split('T')[0],
+            dg.guaranteeLetterDate?.toISOString().split('T')[0],
           ],
-          autoAnnulBlockEnabled: [this.dg.autoAnnulBlockEnabled],
+          autoAnnulBlockEnabled: [dg.autoAnnulBlockEnabled],
         },
         {
           validators: [
@@ -64,47 +71,54 @@ export class DetailsComponent implements OnChanges {
   }
 
   save() {
-    if (this.form?.valid) {
-      // Обновляем объект с учётом изменений
+    if (this.form?.valid && this.dgs && this.dgs.length > 0) {
+      // Берём значения формы
+      const values = this.form.value;
+
+      // Создаём «шаблон» изменений
+      // (по сути, это «одна строка», которая дальше размножится в app.component)
       const updatedDg: DgPayRule = {
-        ...this.dg,
-        ...this.form.value,
-        prepayAmount: this.dg?.prepayAmount
-          ? (this.dg?.prepayAmount * this.form.value.prepayPerc) / 100
-          : this.dg?.prepayAmount,
+        ...this.dgs[0], // Можно взять первую как основу
+        ...values,
+        // Преобразуем дату
+        prepayDate: values.prepayDate ? new Date(values.prepayDate) : null,
+        payDate: values.payDate ? new Date(values.payDate) : null,
+        autoAnnulNoFineDate: values.autoAnnulNoFineDate
+          ? new Date(values.autoAnnulNoFineDate)
+          : null,
+        autoAnnulDate: values.autoAnnulDate
+          ? new Date(values.autoAnnulDate)
+          : null,
+        guaranteeLetterDate: values.guaranteeLetterDate
+          ? new Date(values.guaranteeLetterDate)
+          : null,
       };
 
-      this.onSaveEdited.emit({
-        ...updatedDg,
-        prepayDate: updatedDg.prepayDate
-          ? new Date(updatedDg.prepayDate)
-          : null,
-        payDate: updatedDg.payDate ? new Date(updatedDg.payDate) : null,
-        autoAnnulNoFineDate: updatedDg.autoAnnulNoFineDate
-          ? new Date(updatedDg.autoAnnulNoFineDate)
-          : null,
-        autoAnnulDate: updatedDg.autoAnnulDate
-          ? new Date(updatedDg.autoAnnulDate)
-          : null,
-        guaranteeLetterDate: updatedDg.guaranteeLetterDate
-          ? new Date(updatedDg.guaranteeLetterDate)
-          : null,
-      });
-      // alert('Changes saved (local simulation)');
+      // У поля prepayAmount в исходном коде была логика пересчёта
+      // через prepayPerc, но здесь мы можем этот пересчёт не делать,
+      // а доверить это уже AppComponent (или наоборот).
+      // Для простоты оставим как есть или уберём:
+      updatedDg.prepayAmount = this.dgs[0].prepayAmount
+        ? (this.dgs[0].prepayAmount * updatedDg.prepayPerc) / 100
+        : this.dgs[0].prepayAmount;
+
+      // Отправляем наверх «шаблон» — AppComponent сам знает, сколько строк обновить
+      this.onSaveEdited.emit(updatedDg);
     }
   }
 
   cancel() {
-    if (this.dg && this.form) {
-      // Возвращаемся к исходным значениям
+    // Возвращаем форму к значениям первого элемента
+    if (this.dgs && this.dgs[0] && this.form) {
+      const dg = this.dgs[0];
       this.form.patchValue({
-        prepayPerc: this.dg.prepayPerc,
-        prepayDate: this.dg.prepayDate,
-        payDate: this.dg.payDate,
-        autoAnnulNoFineDate: this.dg.autoAnnulNoFineDate,
-        autoAnnulDate: this.dg.autoAnnulDate,
-        guaranteeLetterDate: this.dg.guaranteeLetterDate,
-        autoAnnulBlockEnabled: this.dg.autoAnnulBlockEnabled,
+        prepayPerc: dg.prepayPerc,
+        prepayDate: dg.prepayDate,
+        payDate: dg.payDate,
+        autoAnnulNoFineDate: dg.autoAnnulNoFineDate,
+        autoAnnulDate: dg.autoAnnulDate,
+        guaranteeLetterDate: dg.guaranteeLetterDate,
+        autoAnnulBlockEnabled: dg.autoAnnulBlockEnabled,
       });
     }
   }

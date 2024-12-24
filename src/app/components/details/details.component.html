@@ -6,7 +6,15 @@
   >
     <div>
       <h2 class="text-left text-2xl mb-6 text-gray-800">
-        Настройки путёвки {{ dg?.dgCode }}
+        <!-- Если выбрана одна путёвка -->
+        <span *ngIf="dgs.length === 1">
+          Настройки путёвки {{ dgs[0].dgCode }}
+        </span>
+
+        <!-- Если выбрано несколько -->
+        <span *ngIf="dgs.length > 1">
+          Редактирование ({{ dgs.length }} путёвок)
+        </span>
       </h2>
 
       <div class="mb-4">

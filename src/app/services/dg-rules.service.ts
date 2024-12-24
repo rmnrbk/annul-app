@@ -41,4 +41,18 @@ export class DgRulesService {
     }
     return of(this.dgPaymentAnnulRules);
   }
+
+  updateMultipleDgRules(updatedList: DgPayRule[]): Observable<DgPayRule[]> {
+    // Предположим, что this.dgPaymentAnnulRules – «рабочий» массив данных
+    // Делать замену элементов будем через .map:
+    this.dgPaymentAnnulRules = this.dgPaymentAnnulRules.map((oldItem) => {
+      // Пытаемся найти в updatedList элемент с таким же dgCode
+      const updatedItem = updatedList.find((u) => u.dgCode === oldItem.dgCode);
+      // Если нашли – подменяем. Иначе оставляем старый
+      return updatedItem ? updatedItem : oldItem;
+    });
+
+    // Возвращаем «новый» массив
+    return of(this.dgPaymentAnnulRules);
+  }
 }

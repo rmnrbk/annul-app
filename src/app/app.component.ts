@@ -18,7 +18,10 @@ import { DgFilter } from './models/dg-filter';
 })
 export class AppComponent implements OnInit {
   dgPaymentAnnulRules: DgPayRule[] = [];
-  selectedDg?: DgPayRule;
+
+  // Раньше было selectedDg?: DgPayRule
+  // Теперь массив:
+  selectedDgs: DgPayRule[] = [];
 
   constructor(
     private dgRulesService: DgRulesService,
@@ -32,25 +35,38 @@ export class AppComponent implements OnInit {
   onFiltersChanged(filters: DgFilter) {
     this.dgRulesService.getDgRules(filters).subscribe((data) => {
       this.dgPaymentAnnulRules = data;
-      console.log(this.dgPaymentAnnulRules);
     });
   }
 
-  onRowSelected(dg: DgPayRule) {
-    this.selectedDg = { ...dg };
+  onRowSelected(selected: DgPayRule[]) {
+    this.selectedDgs = [...selected];
   }
 
-  onSaveChanges(updatedDgPaymentAnnulRule: DgPayRule) {
-    if (updatedDgPaymentAnnulRule.dgCode) {
-      this.dgRulesService
-        .updateDgRule(
-          updatedDgPaymentAnnulRule.dgCode,
-          updatedDgPaymentAnnulRule
-        )
-        .subscribe((updatedArray) => {
-          // Присваиваем обновлённый массив данных, полученный из сервиса
-          this.dgPaymentAnnulRules = updatedArray;
-        });
-    }
+  onSaveChanges(updatedDg: DgPayRule) {
+    if (!this.selectedDgs.length) return;
+
+    const updatedItems = this.selectedDgs.map((dgItem) => ({
+      ...dgItem,
+      // Подставляем поля из updatedDg
+      prepayPerc: updatedDg.prepayPerc,
+      prepayDate: updatedDg.prepayDate,
+      payDate: updatedDg.payDate,
+      autoAnnulNoFineDate: updatedDg.autoAnnulNoFineDate,
+      autoAnnulDate: updatedDg.autoAnnulDate,
+      guaranteeLetterDate: updatedDg.guaranteeLetterDate,
+      autoAnnulBlockEnabled: updatedDg.autoAnnulBlockEnabled,
+      // Допустим, пересчитываем prepayAmount
+      // (если в вашем коде это нужно делать)
+      prepayAmount: dgItem.prepayAmount
+        ? (dgItem.prepayAmount * updatedDg.prepayPerc) / 100
+        : dgItem.prepayAmount,
+    }));
+
+    this.dgRulesService
+      .updateMultipleDgRules(updatedItems)
+      .subscribe((newData) => {
+        // В ответе приходит новый актуальный массив
+        this.dgPaymentAnnulRules = newData;
+      });
   }
 }

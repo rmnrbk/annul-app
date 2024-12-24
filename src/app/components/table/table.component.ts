@@ -6,6 +6,7 @@ import {
   EventEmitter,
   OnChanges,
   SimpleChanges,
+  HostListener,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DgPayRule } from '../../models/dg-pay-rule.model';
@@ -21,9 +22,11 @@ type SortState = 'none' | 'asc' | 'desc';
 })
 export class TableComponent implements OnChanges {
   @Input() dgPaymentAnnulRules: DgPayRule[] = [];
-  @Output() rowSelected = new EventEmitter<DgPayRule>();
+  @Output() rowSelected = new EventEmitter<DgPayRule[]>();
 
-  selectedDgCode?: string;
+  // Массив выбранных кодов (строк)
+  selectedDgCodes: string[] = [];
+  ctrlDown = false;
 
   today: Date = new Date();
   tomorrow: Date;
@@ -36,7 +39,6 @@ export class TableComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    // Когда входные данные меняются, если сортировка включена, ресортируем
     if (changes['dgPaymentAnnulRules'] && this.dgPaymentAnnulRules) {
       if (this.sortState !== 'none') {
         this.applySort();
@@ -44,9 +46,44 @@ export class TableComponent implements OnChanges {
     }
   }
 
+  @HostListener('document:keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Control') {
+      this.ctrlDown = true;
+    }
+  }
+
+  @HostListener('document:keyup', ['$event'])
+  handleKeyUp(event: KeyboardEvent) {
+    if (event.key === 'Control') {
+      this.ctrlDown = false;
+    }
+  }
+
   selectRow(dgPaymentAnnulRule: DgPayRule) {
-    this.selectedDgCode = dgPaymentAnnulRule.dgCode;
-    this.rowSelected.emit(dgPaymentAnnulRule);
+    const dgCode = dgPaymentAnnulRule.dgCode;
+
+    if (this.ctrlDown) {
+      // Если Ctrl зажат, включаем мультивыбор
+      if (this.selectedDgCodes.includes(dgCode)) {
+        // Если строка уже есть в выборе, уберём её (поведение как toggle)
+        this.selectedDgCodes = this.selectedDgCodes.filter(
+          (code) => code !== dgCode
+        );
+      } else {
+        // Добавляем новую строку к выбору
+        this.selectedDgCodes = [...this.selectedDgCodes, dgCode];
+      }
+    } else {
+      // Обычный режим — заменяем весь выбор одной строкой
+      this.selectedDgCodes = [dgCode];
+    }
+
+    // Эмитим массив выбранных строк целиком
+    const selectedDgs = this.dgPaymentAnnulRules.filter((dg) =>
+      this.selectedDgCodes.includes(dg.dgCode)
+    );
+    this.rowSelected.emit(selectedDgs);
   }
 
   private getStartOfDay(d: Date): Date {
@@ -72,7 +109,6 @@ export class TableComponent implements OnChanges {
   }
 
   toggleSort(): void {
-    // Цикл: none -> asc -> desc -> none
     if (this.sortState === 'none') {
       this.sortState = 'asc';
     } else if (this.sortState === 'asc') {
@@ -85,15 +121,17 @@ export class TableComponent implements OnChanges {
 
   applySort(): void {
     if (this.sortState === 'none') {
-      // Без сортировки просто оставляем массив как есть
       return;
     }
 
-    // При сортировке создаём новый отсортированный массив
     this.dgPaymentAnnulRules = [...this.dgPaymentAnnulRules].sort((a, b) => {
       const dateA = a.prepayDate ? new Date(a.prepayDate).getTime() : 0;
       const dateB = b.prepayDate ? new Date(b.prepayDate).getTime() : 0;
       return this.sortState === 'asc' ? dateA - dateB : dateB - dateA;
     });
+  }
+
+  isSelected(dgCode: string): boolean {
+    return this.selectedDgCodes.includes(dgCode);
   }
 }
