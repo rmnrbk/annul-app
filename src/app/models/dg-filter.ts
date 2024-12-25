@@ -1,7 +1,7 @@
 export class DgFilter {
   dgCodes: string[] = [''];
   dgDateType: string = 'CreationDate';
-  paymentDateType: string = 'PrePaymentDate';
+  paymentDateType: string = 'PrePayDate';
   dgDateStart?: Date;
   dgDateEnd?: Date;
   paymentDateStart?: Date;

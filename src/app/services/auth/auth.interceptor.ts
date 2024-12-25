@@ -1,7 +1,7 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const apiBaseUrl = 'http://localhost';
+  const apiBaseUrl = 'http://localhost:3891';
 
   // Добавляем токен только для запросов к вашему API
   if (req.url.startsWith(apiBaseUrl)) {

@@ -31,7 +31,7 @@ export class FiltersComponent {
           new Date().toISOString().split('T')[0],
           [Validators.required],
         ],
-        paymentDateType: ['PrePaymentDate'],
+        paymentDateType: ['PrePayDate'],
         paymentDateStart: [''],
         paymentDateEnd: [''],
         minPrepayment: [0],

@@ -7,7 +7,7 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
     dgCrDate: new Date('2024-12-24'),
     dgTurDateStart: new Date('2024-12-05'),
     dgTurDateEnd: new Date('2024-12-10'),
-    prepayPerc: 20,
+    prepayPerc: 10,
     prepayAmount: 1000,
     payAmount: 10000,
     prepayDate: new Date('2024-12-20'),
@@ -17,7 +17,6 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
     guaranteeLetterDate: new Date('2024-11-05'),
     autoAnnulBlockEnabled: false,
     partnerEmails: [],
-    statuses: 1,
   },
   {
     dgKey: 2,
@@ -35,7 +34,6 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
     guaranteeLetterDate: new Date('2024-10-10'),
     autoAnnulBlockEnabled: true,
     partnerEmails: [],
-    statuses: 2,
   },
   {
     dgKey: 3,
@@ -53,7 +51,6 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
     guaranteeLetterDate: null,
     autoAnnulBlockEnabled: false,
     partnerEmails: [],
-    statuses: 3,
   },
   {
     dgKey: 4,
@@ -61,7 +58,7 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
     dgCrDate: new Date('2024-12-24'),
     dgTurDateStart: new Date('2024-12-05'),
     dgTurDateEnd: new Date('2024-12-10'),
-    prepayPerc: 20,
+    prepayPerc: 10,
     prepayAmount: 1000,
     payAmount: 10000,
     prepayDate: new Date('2024-12-20'),
@@ -71,7 +68,6 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
     guaranteeLetterDate: new Date('2024-11-05'),
     autoAnnulBlockEnabled: false,
     partnerEmails: [],
-    statuses: 1,
   },
   {
     dgKey: 5,
@@ -89,7 +85,6 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
     guaranteeLetterDate: new Date('2024-10-10'),
     autoAnnulBlockEnabled: true,
     partnerEmails: [],
-    statuses: 2,
   },
   {
     dgKey: 6,
@@ -107,7 +102,6 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
     guaranteeLetterDate: null,
     autoAnnulBlockEnabled: false,
     partnerEmails: [],
-    statuses: 3,
   },
   {
     dgKey: 7,
@@ -115,7 +109,7 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
     dgCrDate: new Date('2024-12-24'),
     dgTurDateStart: new Date('2024-12-05'),
     dgTurDateEnd: new Date('2024-12-10'),
-    prepayPerc: 20,
+    prepayPerc: 10,
     prepayAmount: 1000,
     payAmount: 10000,
     prepayDate: new Date('2024-12-20'),
@@ -125,7 +119,6 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
     guaranteeLetterDate: new Date('2024-11-05'),
     autoAnnulBlockEnabled: false,
     partnerEmails: [],
-    statuses: 1,
   },
   {
     dgKey: 8,
@@ -143,7 +136,6 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
     guaranteeLetterDate: new Date('2024-10-10'),
     autoAnnulBlockEnabled: true,
     partnerEmails: [],
-    statuses: 2,
   },
   {
     dgKey: 9,
@@ -161,6 +153,5 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
     guaranteeLetterDate: null,
     autoAnnulBlockEnabled: false,
     partnerEmails: [],
-    statuses: 3,
   },
 ];

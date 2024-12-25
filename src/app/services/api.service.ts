@@ -9,7 +9,7 @@ import { DgFilter } from '../models/dg-filter';
 })
 export class ApiService {
   private apiUrl =
-    'http://localhost:3891/api/PaymentMonitor/GetPaymentMonitorInfo?take=4&skip=0';
+    'http://localhost:3891/api/PaymentMonitor/GetPaymentMonitorInfo?take=20&skip=0';
 
   constructor(private http: HttpClient) {}
 

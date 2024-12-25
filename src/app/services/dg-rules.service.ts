@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { DgRulesMockService } from './dg-rules-mock.service';
 import { ApiService } from './api.service';
 import { DgPayRule } from '../models/dg-pay-rule.model';
-import { Observable, of } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { DgFilter } from '../models/dg-filter';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DgRulesService {
-  private useMock: boolean = true;
+  private useMock: boolean = false;
 
   dgPaymentAnnulRules: DgPayRule[] = [];
 
@@ -22,11 +22,12 @@ export class DgRulesService {
       return of(this.dgPaymentAnnulRules);
     }
 
-    this.api.getDgRules(filter).subscribe((data) => {
-      this.dgPaymentAnnulRules = data;
-    });
-
-    return of(this.dgPaymentAnnulRules);
+    return this.api.getDgRules(filter).pipe(
+      tap((data) => {
+        this.dgPaymentAnnulRules = data;
+        console.log(data);
+      })
+    );
   }
 
   updateDgRule(dgCode: string, updatedDg: DgPayRule): Observable<DgPayRule[]> {

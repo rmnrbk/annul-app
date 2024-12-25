@@ -18,9 +18,6 @@ import { DgFilter } from './models/dg-filter';
 })
 export class AppComponent implements OnInit {
   dgPaymentAnnulRules: DgPayRule[] = [];
-
-  // Раньше было selectedDg?: DgPayRule
-  // Теперь массив:
   selectedDgs: DgPayRule[] = [];
 
   constructor(

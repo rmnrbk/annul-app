@@ -19,5 +19,4 @@ export interface DgPayRule {
   payAmount: number;
 
   partnerEmails: string[];
-  statuses: number;
 }
