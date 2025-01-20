@@ -1,7 +1,6 @@
 export function processDgCodesString(dgCodesString: string): string[] {
   // Удаляем всё, кроме английских букв и цифр
   const cleanedString = dgCodesString.replace(/[^a-zA-Z0-9]/g, '');
-  // .toUpperCase();
 
   // Разбиваем строку на части по 10 символов
   const dgCodes: string[] = [];
@@ -12,19 +11,53 @@ export function processDgCodesString(dgCodesString: string): string[] {
   return dgCodes;
 }
 
+// Конвертируем string в Date и устанавливаем время 00:00
+export function toLocalMidnight(dateStr: string): Date {
+  const d = new Date(dateStr);
+  return d;
+}
+
+// Преобразование Date -> "YYYY-MM-DD" для <input type="date">
+export function formatDate(d: Date | null): string {
+  if (d == null) return '';
+
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+export function mergeDateAndDatetime(
+  oldDate: Date | null,
+  newDateStr: string
+): Date | null {
+  if (oldDate && newDateStr) {
+    const [yyyyStr, mmStr, ddStr] = newDateStr.split('-');
+    const oldHours = oldDate.getUTCHours();
+    const oldMinutes = oldDate.getUTCMinutes();
+    const oldSeconds = oldDate.getUTCSeconds();
+
+    // 3. Создаём новую дату в UTC:
+    const updatedPrepayDate = new Date(
+      Date.UTC(+yyyyStr, +mmStr - 1, +ddStr, oldHours, oldMinutes, oldSeconds)
+    );
+
+    return updatedPrepayDate;
+  }
+  return null;
+}
+
 export function parseRuDate(dateStr: string | null): Date | null {
   if (!dateStr) return null;
 
-  // Предположим, пришло "26.12.2024 23:59:00"
-  // Разделяем дату и время
-  const [datePart, timePart] = dateStr.split(' '); // ["26.12.2024", "23:59:00"]
+  const [datePart, timePart] = dateStr.split(' ');
   if (!datePart) return null;
 
-  const [dayStr, monthStr, yearStr] = datePart.split('.'); // ["26","12","2024"]
+  const [dayStr, monthStr, yearStr] = datePart.split('.');
   if (!dayStr || !monthStr || !yearStr) return null;
 
   const day = parseInt(dayStr, 10);
-  // Месяц в JS — от 0 до 11, поэтому вычитаем 1
   const month = parseInt(monthStr, 10) - 1;
   const year = parseInt(yearStr, 10);
 
@@ -33,7 +66,6 @@ export function parseRuDate(dateStr: string | null): Date | null {
   let seconds = 0;
 
   if (timePart) {
-    // timePart = "23:59:00"
     const [hStr, mStr, sStr] = timePart.split(':');
     hours = parseInt(hStr || '0', 10);
     minutes = parseInt(mStr || '0', 10);

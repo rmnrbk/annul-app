@@ -15,19 +15,17 @@ import {
 } from '@angular/forms';
 import { DgPayRule } from '../../models/dg-pay-rule.model';
 import { DetailsValidators } from './validators/details-validators';
+import { formatDate, mergeDateAndDatetime } from '../../services/util.service';
 
 @Component({
   selector: 'app-details',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './details.component.html',
-  // styleUrls: ['./details.component.css'],
 })
 export class DetailsComponent implements OnChanges {
-  // Раньше было dg?: DgPayRule
   @Input() dgs: DgPayRule[] = [];
 
-  // Вызывается при клике "Сохранить"
   @Output() onSaveEdited = new EventEmitter<DgPayRule>();
 
   form?: FormGroup;
@@ -36,23 +34,19 @@ export class DetailsComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.dgs && this.dgs.length > 0) {
-      // Если выбрано N строк – берём первую в качестве «эталона»
-      // (или при желании вычисляем «общие» поля).
+      // Пока берём первую путёвку из нескольких выбранных
+      // TODO: реализовать массовое обновление
       const dg = this.dgs[0];
 
       // Создаём форму на базе первого dg
       this.form = this.fb.group(
         {
           prepayPerc: [dg.prepayPerc],
-          prepayDate: [dg.prepayDate?.toISOString().split('T')[0]],
-          payDate: [dg.payDate?.toISOString().split('T')[0]],
-          autoAnnulNoFineDate: [
-            dg.autoAnnulNoFineDate?.toISOString().split('T')[0],
-          ],
-          autoAnnulDate: [dg.autoAnnulDate?.toISOString().split('T')[0]],
-          guaranteeLetterDate: [
-            dg.guaranteeLetterDate?.toISOString().split('T')[0],
-          ],
+          prepayDate: [formatDate(dg.prepayDate)],
+          payDate: [formatDate(dg.payDate)],
+          autoAnnulNoFineDate: [formatDate(dg.autoAnnulNoFineDate)],
+          autoAnnulDate: [formatDate(dg.autoAnnulDate)],
+          guaranteeLetterDate: [formatDate(dg.guaranteeLetterDate)],
           autoAnnulBlockEnabled: [dg.autoAnnulBlockEnabled],
         },
         {
@@ -72,37 +66,32 @@ export class DetailsComponent implements OnChanges {
 
   save() {
     if (this.form?.valid && this.dgs && this.dgs.length > 0) {
-      // Берём значения формы
       const values = this.form.value;
+      const dg = this.dgs[0];
 
-      // Создаём «шаблон» изменений
-      // (по сути, это «одна строка», которая дальше размножится в app.component)
       const updatedDg: DgPayRule = {
-        ...this.dgs[0], // Можно взять первую как основу
+        ...this.dgs[0],
         ...values,
-        // Преобразуем дату
-        prepayDate: values.prepayDate ? new Date(values.prepayDate) : null,
-        payDate: values.payDate ? new Date(values.payDate) : null,
-        autoAnnulNoFineDate: values.autoAnnulNoFineDate
-          ? new Date(values.autoAnnulNoFineDate)
-          : null,
-        autoAnnulDate: values.autoAnnulDate
-          ? new Date(values.autoAnnulDate)
-          : null,
-        guaranteeLetterDate: values.guaranteeLetterDate
-          ? new Date(values.guaranteeLetterDate)
-          : null,
+        prepayDate: mergeDateAndDatetime(dg.prepayDate, values.prepayDate),
+        payDate: mergeDateAndDatetime(dg.payDate, values.payDate),
+        autoAnnulNoFineDate: mergeDateAndDatetime(
+          dg.autoAnnulNoFineDate,
+          values.autoAnnulNoFineDate
+        ),
+        autoAnnulDate: mergeDateAndDatetime(
+          dg.autoAnnulDate,
+          values.autoAnnulDate
+        ),
+        guaranteeLetterDate: mergeDateAndDatetime(
+          dg.guaranteeLetterDate,
+          values.guaranteeLetterDate
+        ),
       };
 
-      // У поля prepayAmount в исходном коде была логика пересчёта
-      // через prepayPerc, но здесь мы можем этот пересчёт не делать,
-      // а доверить это уже AppComponent (или наоборот).
-      // Для простоты оставим как есть или уберём:
       updatedDg.prepayAmount = this.dgs[0].prepayAmount
         ? (this.dgs[0].prepayAmount * updatedDg.prepayPerc) / 100
         : this.dgs[0].prepayAmount;
 
-      // Отправляем наверх «шаблон» — AppComponent сам знает, сколько строк обновить
       this.onSaveEdited.emit(updatedDg);
     }
   }

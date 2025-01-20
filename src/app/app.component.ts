@@ -13,7 +13,6 @@ import { DgFilter } from './models/dg-filter';
   standalone: true,
   imports: [CommonModule, FiltersComponent, TableComponent, DetailsComponent],
   templateUrl: './app.component.html',
-  // styleUrls: ['./app.component.css'],
   providers: [DgRulesService],
 })
 export class AppComponent implements OnInit {
@@ -44,7 +43,6 @@ export class AppComponent implements OnInit {
 
     const updatedItems = this.selectedDgs.map((dgItem) => ({
       ...dgItem,
-      // Подставляем поля из updatedDg
       prepayPerc: updatedDg.prepayPerc,
       prepayDate: updatedDg.prepayDate,
       payDate: updatedDg.payDate,
@@ -52,8 +50,6 @@ export class AppComponent implements OnInit {
       autoAnnulDate: updatedDg.autoAnnulDate,
       guaranteeLetterDate: updatedDg.guaranteeLetterDate,
       autoAnnulBlockEnabled: updatedDg.autoAnnulBlockEnabled,
-      // Допустим, пересчитываем prepayAmount
-      // (если в вашем коде это нужно делать)
       prepayAmount: dgItem.prepayAmount
         ? (dgItem.prepayAmount * updatedDg.prepayPerc) / 100
         : dgItem.prepayAmount,
@@ -62,7 +58,6 @@ export class AppComponent implements OnInit {
     this.dgRulesService
       .updateMultipleDgRules(updatedItems)
       .subscribe((newData) => {
-        // В ответе приходит новый актуальный массив
         this.dgPaymentAnnulRules = newData;
       });
   }

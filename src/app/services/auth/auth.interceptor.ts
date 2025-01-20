@@ -3,7 +3,7 @@ import { HttpInterceptorFn } from '@angular/common/http';
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const apiBaseUrl = 'http://localhost:3891';
 
-  // Добавляем токен только для запросов к вашему API
+  // Добавляем токен для запросов только к нашему API
   if (req.url.startsWith(apiBaseUrl)) {
     const token = getTokenFromCookies();
 
@@ -19,7 +19,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     }
   }
 
-  // Пропускаем запрос без изменений, если он не относится к вашему API
+  // Пропускаем запрос без изменений, если он не относится к нашему API
   return next(req);
 };
 

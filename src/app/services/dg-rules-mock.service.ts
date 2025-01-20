@@ -27,7 +27,6 @@ export class DgRulesMockService {
 
     let filtered = [...this.dgPaymentAnnulRules];
 
-    // Фильтрация по коду(ам) путёвки
     // Если указан код путёвки, то остальные фильтры игнорируются.
     if (dgCodes.length !== 0) {
       return filtered.filter((dg) => {

@@ -17,6 +17,7 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
     guaranteeLetterDate: new Date('2024-11-05'),
     autoAnnulBlockEnabled: false,
     partnerEmails: [],
+    currency: 'руб',
   },
   {
     dgKey: 2,
@@ -34,6 +35,7 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
     guaranteeLetterDate: new Date('2024-10-10'),
     autoAnnulBlockEnabled: true,
     partnerEmails: [],
+    currency: 'руб',
   },
   {
     dgKey: 3,
@@ -51,6 +53,7 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
     guaranteeLetterDate: null,
     autoAnnulBlockEnabled: false,
     partnerEmails: [],
+    currency: 'руб',
   },
   {
     dgKey: 4,
@@ -68,6 +71,7 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
     guaranteeLetterDate: new Date('2024-11-05'),
     autoAnnulBlockEnabled: false,
     partnerEmails: [],
+    currency: 'руб',
   },
   {
     dgKey: 5,
@@ -85,6 +89,7 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
     guaranteeLetterDate: new Date('2024-10-10'),
     autoAnnulBlockEnabled: true,
     partnerEmails: [],
+    currency: 'руб',
   },
   {
     dgKey: 6,
@@ -102,6 +107,7 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
     guaranteeLetterDate: null,
     autoAnnulBlockEnabled: false,
     partnerEmails: [],
+    currency: 'руб',
   },
   {
     dgKey: 7,
@@ -119,6 +125,7 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
     guaranteeLetterDate: new Date('2024-11-05'),
     autoAnnulBlockEnabled: false,
     partnerEmails: [],
+    currency: 'руб',
   },
   {
     dgKey: 8,
@@ -136,6 +143,7 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
     guaranteeLetterDate: new Date('2024-10-10'),
     autoAnnulBlockEnabled: true,
     partnerEmails: [],
+    currency: 'руб',
   },
   {
     dgKey: 9,
@@ -153,5 +161,6 @@ export const MOCK_DGPAYMENTANNULRULES: DgPayRule[] = [
     guaranteeLetterDate: null,
     autoAnnulBlockEnabled: false,
     partnerEmails: [],
+    currency: 'руб',
   },
 ];

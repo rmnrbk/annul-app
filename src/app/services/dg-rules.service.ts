@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { DgRulesMockService } from './dg-rules-mock.service';
 import { ApiService } from './api.service';
-import { DgPayRule } from '../models/dg-pay-rule.model';
-import { Observable, of, tap } from 'rxjs';
+import { DgPayRule, DgPayRuleRaw } from '../models/dg-pay-rule.model';
+import { map, Observable, of, tap } from 'rxjs';
 import { DgFilter } from '../models/dg-filter';
+import { toLocalMidnight } from './util.service';
 
 @Injectable({
   providedIn: 'root',
@@ -23,9 +24,36 @@ export class DgRulesService {
     }
 
     return this.api.getDgRules(filter).pipe(
-      tap((data) => {
-        this.dgPaymentAnnulRules = data;
+      // Преобразуем все даты-строки в объекты Date:
+      map((data: DgPayRuleRaw[]) => {
         console.log(data);
+        return data.map((dg) => {
+          return {
+            ...dg,
+            dgCrDate: dg.dgCrDate ? toLocalMidnight(dg.dgCrDate) : null,
+            dgTurDateStart: dg.dgTurDateStart
+              ? toLocalMidnight(dg.dgTurDateStart)
+              : null,
+            dgTurDateEnd: dg.dgTurDateEnd
+              ? toLocalMidnight(dg.dgTurDateEnd)
+              : null,
+            prepayDate: dg.prepayDate ? toLocalMidnight(dg.prepayDate) : null,
+            payDate: dg.payDate ? toLocalMidnight(dg.payDate) : null,
+            autoAnnulNoFineDate: dg.autoAnnulNoFineDate
+              ? toLocalMidnight(dg.autoAnnulNoFineDate)
+              : null,
+            autoAnnulDate: dg.autoAnnulDate
+              ? toLocalMidnight(dg.autoAnnulDate)
+              : null,
+            guaranteeLetterDate: dg.guaranteeLetterDate
+              ? toLocalMidnight(dg.guaranteeLetterDate)
+              : null,
+          };
+        });
+      }),
+      tap((parsedData) => {
+        this.dgPaymentAnnulRules = parsedData;
+        console.log(parsedData);
       })
     );
   }
@@ -44,10 +72,7 @@ export class DgRulesService {
   }
 
   updateMultipleDgRules(updatedList: DgPayRule[]): Observable<DgPayRule[]> {
-    // Предположим, что this.dgPaymentAnnulRules – «рабочий» массив данных
-    // Делать замену элементов будем через .map:
     this.dgPaymentAnnulRules = this.dgPaymentAnnulRules.map((oldItem) => {
-      // Пытаемся найти в updatedList элемент с таким же dgCode
       const updatedItem = updatedList.find((u) => u.dgCode === oldItem.dgCode);
       // Если нашли – подменяем. Иначе оставляем старый
       return updatedItem ? updatedItem : oldItem;

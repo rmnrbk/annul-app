@@ -24,7 +24,6 @@ export class TableComponent implements OnChanges {
   @Input() dgPaymentAnnulRules: DgPayRule[] = [];
   @Output() rowSelected = new EventEmitter<DgPayRule[]>();
 
-  // Массив выбранных кодов (строк)
   selectedDgCodes: string[] = [];
   ctrlDown = false;
 
@@ -32,6 +31,7 @@ export class TableComponent implements OnChanges {
   tomorrow: Date;
 
   sortState: SortState = 'none';
+  lastCol: number = -1;
 
   constructor() {
     this.tomorrow = new Date(this.today);
@@ -66,7 +66,7 @@ export class TableComponent implements OnChanges {
     if (this.ctrlDown) {
       // Если Ctrl зажат, включаем мультивыбор
       if (this.selectedDgCodes.includes(dgCode)) {
-        // Если строка уже есть в выборе, уберём её (поведение как toggle)
+        // Если строка уже есть в выборе, уберём её (toggle)
         this.selectedDgCodes = this.selectedDgCodes.filter(
           (code) => code !== dgCode
         );
@@ -75,11 +75,9 @@ export class TableComponent implements OnChanges {
         this.selectedDgCodes = [...this.selectedDgCodes, dgCode];
       }
     } else {
-      // Обычный режим — заменяем весь выбор одной строкой
       this.selectedDgCodes = [dgCode];
     }
 
-    // Эмитим массив выбранных строк целиком
     const selectedDgs = this.dgPaymentAnnulRules.filter((dg) =>
       this.selectedDgCodes.includes(dg.dgCode)
     );
@@ -108,7 +106,14 @@ export class TableComponent implements OnChanges {
     );
   }
 
-  toggleSort(): void {
+  toggleSort(col: number): void {
+    if (this.lastCol !== col) {
+      this.lastCol = col;
+      this.sortState = 'asc';
+      this.applySort();
+      return;
+    }
+
     if (this.sortState === 'none') {
       this.sortState = 'asc';
     } else if (this.sortState === 'asc') {
@@ -125,9 +130,19 @@ export class TableComponent implements OnChanges {
     }
 
     this.dgPaymentAnnulRules = [...this.dgPaymentAnnulRules].sort((a, b) => {
-      const dateA = a.prepayDate ? new Date(a.prepayDate).getTime() : 0;
-      const dateB = b.prepayDate ? new Date(b.prepayDate).getTime() : 0;
-      return this.sortState === 'asc' ? dateA - dateB : dateB - dateA;
+      if (this.lastCol == 2) {
+        const dateA = a.prepayDate ? new Date(a.prepayDate).getTime() : 0;
+        const dateB = b.prepayDate ? new Date(b.prepayDate).getTime() : 0;
+        return this.sortState === 'asc' ? dateA - dateB : dateB - dateA;
+      }
+      // если сортировка по валюте
+      else {
+        const curA = a.currency;
+        const curB = b.currency;
+        return this.sortState === 'asc'
+          ? curA.localeCompare(curB)
+          : curB.localeCompare(curA);
+      }
     });
   }
 

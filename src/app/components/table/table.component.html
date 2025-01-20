@@ -10,14 +10,49 @@
           <th class="py-3 px-6 text-center">Предоплата, %</th>
           <th class="py-3 px-6 text-center">Предоплата, руб</th>
           <th class="py-3 px-6 text-center relative">
-            Дата предоплаты
+            Валюта
             <button
-              (click)="toggleSort()"
+              (click)="toggleSort(1)"
               class="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center p-1 border border-gray-300 bg-white rounded hover:bg-gray-100"
             >
-              <span *ngIf="sortState === 'none'" class="text-gray-400">↕</span>
-              <span *ngIf="sortState === 'asc'" class="text-green-600">↑</span>
-              <span *ngIf="sortState === 'desc'" class="text-red-600">↓</span>
+              <span
+                *ngIf="sortState === 'none' || (lastCol != -1 && lastCol != 1)"
+                class="text-gray-400"
+                >↕</span
+              >
+              <span
+                *ngIf="sortState === 'asc' && lastCol == 1"
+                class="text-green-600"
+                >↑</span
+              >
+              <span
+                *ngIf="sortState === 'desc' && lastCol == 1"
+                class="text-red-600"
+                >↓</span
+              >
+            </button>
+          </th>
+          <th class="py-3 px-6 text-center relative">
+            Дата предоплаты
+            <button
+              (click)="toggleSort(2)"
+              class="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center p-1 border border-gray-300 bg-white rounded hover:bg-gray-100"
+            >
+              <span
+                *ngIf="sortState === 'none' || (lastCol != -1 && lastCol != 2)"
+                class="text-gray-400"
+                >↕</span
+              >
+              <span
+                *ngIf="sortState === 'asc' && lastCol == 2"
+                class="text-green-600"
+                >↑</span
+              >
+              <span
+                *ngIf="sortState === 'desc' && lastCol == 2"
+                class="text-red-600"
+                >↓</span
+              >
             </button>
           </th>
           <th class="py-3 px-6 text-center">Дата полной оплаты</th>
@@ -38,6 +73,7 @@
           <td class="py-4 px-6 text-center">{{ dg.dgCode }}</td>
           <td class="py-4 px-6 text-center">{{ dg.prepayPerc }}</td>
           <td class="py-4 px-6 text-center">{{ dg.prepayAmount }}</td>
+          <td class="py-4 px-6 text-center">{{ dg.currency }}</td>
           <td
             class="py-4 px-6 text-center"
             [ngClass]="{

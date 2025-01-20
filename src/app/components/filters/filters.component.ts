@@ -11,7 +11,6 @@ import { FilterValidators } from './validators/filter-validators';
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './filters.component.html',
-  // styleUrls: ['./filters.component.css'],
 })
 export class FiltersComponent {
   filterForm: FormGroup;
@@ -62,7 +61,7 @@ export class FiltersComponent {
 
     return {
       ...rawFormValues,
-      dgCodes: dgCodesArray, // Отдаём массив кодов вместо строки кодов
+      dgCodes: dgCodesArray,
     };
   }
 
